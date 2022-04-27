@@ -1,13 +1,6 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import useMainStore from '@/store/store_index'
-
-const mainStore = useMainStore()
-mainStore.count++
-mainStore.value++
-mainStore.addCount()
-
 </script>
 
 <template>
