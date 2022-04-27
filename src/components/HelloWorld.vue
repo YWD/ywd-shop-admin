@@ -1,14 +1,20 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref } from 'vue'
 
 defineProps<{ msg: string }>()
 
 const count = ref(0)
+// this works use count
+const abc = () => <div>{count.value}</div>
+// const abc = <div>abc</div>
+const abcd = <div>this doesn't work with count</div>
+
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
-
+  <abc /> <!--// todo webstorm unknown html tag jsx -->
+  <abcd />
   <p>
     Recommended IDE setup:
     <a
