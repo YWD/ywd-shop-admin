@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+// todo template type infer
 const useMainStore = defineStore('main', {
   state: () => {
     return {
