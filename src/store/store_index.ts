@@ -5,7 +5,8 @@ const useMainStore = defineStore('main', {
   state: () => {
     return {
       count: 0,
-      value: 2
+      value: 2,
+      collapse: false
     }
   },
   getters: {
