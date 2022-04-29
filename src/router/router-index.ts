@@ -1,9 +1,10 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw, RouterView } from 'vue-router'
 import HomeIndex from '../views/home/HomeIndex.vue'
 import LoginIndex from '../views/login/LoginIndex.vue'
 import AppLayout from '@/layout/AppLayout.vue'
 import HtmlTest from '@/views/test/HtmlTest.vue'
 import productRoute from './modules/product'
+import permissionRoute from './modules/permission'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import useMainStore from '@/store/store_index'
@@ -21,7 +22,14 @@ const routes: RouteRecordRaw[] = [
         name: 'home',
         component: HomeIndex
       },
-      productRoute
+      productRoute,
+      {
+        path: 'settings',
+        component: RouterView,
+        children: [
+          permissionRoute
+        ]
+      }
     ]
   },
   {
@@ -45,7 +53,6 @@ router.beforeEach((to) => {
   nprogress.start()
   const mainStore = useMainStore()
   if (to.meta.requiresAuth && !mainStore.user) {
-    console.log('去登录')
     // 此路由需要授权，请检查是否已登录
     // 如果没有，则重定向到登录页面
     return {

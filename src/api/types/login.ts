@@ -1,16 +1,17 @@
-// 请求接口 InterfaceInput
-export interface IILoginUser {
+// 登录用户
+export interface LoginUser {
   account: string,
   pwd: string,
   imgcode: string
 }
-// 响应接口 InterfaceOutput
-export interface IOLoginInfo {
+// 登录信息
+export interface LoginInfo {
   login_logo: string,
   logo_rectangle: string,
   logo_square: string
 }
 
+// 用户信息
 export interface UserInfo {
   id: number
   account: string

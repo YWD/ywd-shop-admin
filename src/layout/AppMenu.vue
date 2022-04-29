@@ -4,9 +4,9 @@
     background-color="#304156"
     class="el-menu-vertical-demo"
     text-color="#fff"
+    router
     :default-active="$route.path"
     :collapse="mainStore.collapse"
-    router
   >
     <el-sub-menu index="1">
       <template #title>
@@ -49,6 +49,29 @@
       <el-menu-item index="/product/reply">
         <span>商品评论</span>
       </el-menu-item>
+    </el-sub-menu>
+    <el-sub-menu index="/settings">
+      <template #title>
+        <el-icon><setting /></el-icon>
+        <span>设置</span>
+      </template>
+      <el-menu-item index="/settings/system">
+        <span>系统设置</span>
+      </el-menu-item>
+      <el-sub-menu index="/settings/permission">
+        <template #title>
+          <span>管理权限</span>
+        </template>
+        <el-menu-item index="/settings/permission/role">
+          <span>角色管理</span>
+        </el-menu-item>
+        <el-menu-item index="/settings/permission/admin">
+          <span>管理员列表</span>
+        </el-menu-item>
+        <el-menu-item index="/settings/permission/rule">
+          <span>权限规则</span>
+        </el-menu-item>
+      </el-sub-menu>
     </el-sub-menu>
   </el-menu>
 </template>
