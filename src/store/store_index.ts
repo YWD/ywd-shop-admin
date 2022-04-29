@@ -1,4 +1,7 @@
 import { defineStore } from 'pinia'
+import { UserInfo } from '@/api/types/login'
+import { getItem, setItem } from '@/utils/storage'
+import { USER } from '@/utils/constants'
 
 // todo template type infer
 const useMainStore = defineStore('main', {
@@ -6,7 +9,8 @@ const useMainStore = defineStore('main', {
     return {
       count: 0,
       value: 2,
-      collapse: false
+      collapse: false,
+      user: getItem<UserInfo>(USER)
     }
   },
   getters: {
@@ -17,6 +21,11 @@ const useMainStore = defineStore('main', {
   actions: {
     addCount () {
       this.count++
+    },
+
+    setUser (user: UserInfo) {
+      this.user = user
+      setItem(USER, user)
     }
   }
 })

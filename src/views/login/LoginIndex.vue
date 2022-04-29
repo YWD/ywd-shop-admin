@@ -1,15 +1,22 @@
 <template>
   <div class="login-container">
     <el-form
-      size="medium"
+      ref="formRef"
+      :model="formUser"
+      :rules="formRules"
     >
       <img
         src="src/assets/login-logo.png"
         alt="登录logo"
         style="height: 80px"
       >
-      <el-form-item>
-        <el-input placeholder="请输入用户名">
+      <el-form-item
+        prop="name"
+      >
+        <el-input
+          placeholder="请输入用户名"
+          v-model="formUser.account"
+        >
           <template #prefix>
             <el-icon>
               <user />
@@ -18,7 +25,10 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input placeholder="请输入密码">
+        <el-input
+          placeholder="请输入密码"
+          v-model="formUser.pwd"
+        >
           <template #prefix>
             <el-icon>
               <lock />
@@ -28,7 +38,10 @@
       </el-form-item>
       <el-form-item>
         <div style="display: flex; justify-content: space-between; width: 100%">
-          <el-input placeholder="请输入验证码">
+          <el-input
+            placeholder="请输入验证码"
+            v-model="formUser.imgcode"
+          >
             <template #prefix>
               <el-icon>
                 <key />
@@ -36,24 +49,81 @@
             </template>
           </el-input>
           <img
-            src="https://shop.fed.lagounews.com/api/admin/captcha_pro?1651148848000"
+            :src="captchaSrc"
+            alt="验证码"
             style="height: 31px;"
+            @click="loadCaptcha"
           >
         </div>
       </el-form-item>
       <el-button
-        style="width: 100%"
         type="primary"
-        size="large"
+        @click="login"
+        native-type="submit"
       >
         登录
+      </el-button>
+      <el-button
+        @click="resetForm"
+      >
+        重置
       </el-button>
     </el-form>
   </div>
 </template>
 <script lang="ts" setup>
+import { onMounted, reactive, ref } from 'vue'
+import { FormInstance, FormRules } from 'element-plus'
+import { reqCaptchaG, reqLoginP } from '@/api/login'
+import { useRouter } from 'vue-router'
+import useMainStore from '@/store/store_index'
 
-import { Key } from '@element-plus/icons-vue'
+const router = useRouter()
+const mainStore = useMainStore()
+const formRef = ref<FormInstance>()
+const formUser = reactive({
+  account: 'admin',
+  pwd: '123456',
+  imgcode: '',
+  age: 18,
+  no: false
+})
+const formRules: FormRules = {
+  name: [
+    { required: true, message: 'please input name', trigger: 'blur' }
+  ]
+}
+const captchaSrc = ref('')
+
+const login = async () => {
+  const valid = await formRef.value?.validate
+  if (valid) {
+    const loginUser = {
+      account: formUser.account,
+      pwd: formUser.pwd,
+      imgcode: formUser.imgcode,
+      age: 18 // todo
+    }
+    // const rsp = await reqLoginP(loginUser)
+    // console.log(rsp.user_info.account)
+    // await router.replace('/')
+    reqLoginP(loginUser).then(rsp => {
+      mainStore.setUser(rsp.user_info)
+      router.replace('/')
+    }).catch(() => {})
+  }
+}
+const resetForm = () => {
+  formRef.value?.resetFields()
+}
+const loadCaptcha = async () => {
+  const rsp = await reqCaptchaG()
+  captchaSrc.value = URL.createObjectURL(rsp)
+}
+
+onMounted(() => {
+  loadCaptcha()
+})
 </script>
 
 <style lang="scss" scoped>
