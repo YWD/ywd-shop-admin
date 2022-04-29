@@ -4,6 +4,7 @@
       ref="formRef"
       :model="formUser"
       :rules="formRules"
+      @submit.prevent="requestLogin"
     >
       <img
         src="src/assets/login-logo.png"
@@ -52,13 +53,12 @@
             :src="captchaSrc"
             alt="验证码"
             style="height: 31px;"
-            @click="loadCaptcha"
+            @click="requestCaptcha"
           >
         </div>
       </el-form-item>
       <el-button
         type="primary"
-        @click="login"
         native-type="submit"
       >
         登录
@@ -74,7 +74,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
-import { reqCaptchaG, reqLoginP } from '@/api/login'
+import { captcha, login } from '@/api/login'
 import { useRouter } from 'vue-router'
 import useMainStore from '@/store/store_index'
 
@@ -95,7 +95,7 @@ const formRules: FormRules = {
 }
 const captchaSrc = ref('')
 
-const login = async () => {
+const requestLogin = async () => {
   const valid = await formRef.value?.validate
   if (valid) {
     const loginUser = {
@@ -107,22 +107,25 @@ const login = async () => {
     // const rsp = await reqLoginP(loginUser)
     // console.log(rsp.user_info.account)
     // await router.replace('/')
-    reqLoginP(loginUser).then(rsp => {
+    login(loginUser).then(rsp => {
+      rsp.user_info.token = rsp.token
       mainStore.setUser(rsp.user_info)
-      router.replace('/')
+      let redirect = router.currentRoute.value.query.redirect
+      if (typeof redirect !== 'string') redirect = '/'
+      router.replace(redirect)
     }).catch(() => {})
   }
 }
 const resetForm = () => {
   formRef.value?.resetFields()
 }
-const loadCaptcha = async () => {
-  const rsp = await reqCaptchaG()
+const requestCaptcha = async () => {
+  const rsp = await captcha()
   captchaSrc.value = URL.createObjectURL(rsp)
 }
 
 onMounted(() => {
-  loadCaptcha()
+  requestCaptcha()
 })
 </script>
 

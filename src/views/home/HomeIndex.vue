@@ -6,11 +6,11 @@
 </template>
 
 <script lang='ts' setup>
-import { reqLoginInfoG } from '@/api/login'
+import { loginInfo } from '@/api/login'
 import { onMounted } from 'vue'
 
 onMounted(async () => {
-  const data = await reqLoginInfoG()
+  const data = await loginInfo()
   console.log(data.login_logo)
 })
 </script>

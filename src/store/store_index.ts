@@ -8,7 +8,6 @@ const useMainStore = defineStore('main', {
   state: () => {
     return {
       count: 0,
-      value: 2,
       collapse: false,
       user: getItem<UserInfo>(USER)
     }
@@ -19,11 +18,7 @@ const useMainStore = defineStore('main', {
     }
   },
   actions: {
-    addCount () {
-      this.count++
-    },
-
-    setUser (user: UserInfo) {
+    setUser (user: UserInfo | null) {
       this.user = user
       setItem(USER, user)
     }

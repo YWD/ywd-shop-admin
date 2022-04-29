@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import type { IResponse } from '@/api/types/common'
 import { ElMessage } from 'element-plus'
+import useMainStore from '@/store/store_index'
 
 const request = axios.create({
   // baseURL: import.meta.env.VITE_API_BASE_URL
@@ -9,6 +10,11 @@ const request = axios.create({
 // Add a request interceptor
 request.interceptors.request.use(function (config) {
   // Do something before request is sent
+  const mainStore = useMainStore()
+  if (mainStore.user && mainStore.user.token) {
+    if (!config.headers) config.headers = {}
+    config.headers.Authorization = `Bearer ${mainStore.user.token}`
+  }
   return config
 }, function (error) {
   // Do something with request error
