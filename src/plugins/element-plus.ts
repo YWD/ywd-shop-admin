@@ -7,7 +7,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 export default {
   install (app: App) {
     app.use(ElementPlus, {
-      local: zhCn
+      locale: zhCn
     })
     for (let [key, component] of Object.entries(ElementPlusIconsVue)) {
       if (key === 'Menu') {

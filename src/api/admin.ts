@@ -9,7 +9,7 @@ export const deleteAdmin = (id: number) => request.delete<AdminResponse>('admin/
 // 编辑管理员
 export const editAdmin = (admin: Partial<Admin>) => request.put('admin/setting/admin/' + admin.id, admin)
 // 管理员列表
-export const getAdmins = () => request.get<{
+export const getAdmins = (query: any) => request.get<{
   count: number,
   list: Admin[]
-}>('admin/setting/admin')
+}>('admin/setting/admin', query)
