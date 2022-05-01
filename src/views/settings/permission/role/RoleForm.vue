@@ -61,11 +61,12 @@
 <script lang='ts' setup>
 /* eslint-disable import/first */
 import DialogFormIndex from '@/components/dialog-form/DialogFormIndex.vue'
-import { nextTick, ref } from 'vue'
+import { nextTick, reactive, ref } from 'vue'
 import { createRole, getMenus, getRole } from '@/api/role'
-import { FormRole, Menu } from '@/api/types/role'
+import { Menu } from '@/api/types/role'
 import { ElTreeInstance } from '@/types/element-plus'
 import { ElMessage, FormInstance } from 'element-plus'
+import { assignObjectValue } from '@/utils/method'
 
 const props = defineProps({
   roleId: {
@@ -75,16 +76,22 @@ const props = defineProps({
 })
 const formLoading = ref(false)
 const formRef = ref<FormInstance>()
-const formRole = ref<FormRole>({
+const formRole = reactive({
   id: 0,
   role_name: '',
   status: 1,
   checked_menus: [] as number[]
 })
+// const formRole = ref<FormRole>({
+//   id: 0,
+//   role_name: '',
+//   status: 1,
+//   checked_menus: [] as number[]
+// })
 
 const menus = ref<Menu[]>()
 const onRoleFormOpen = async () => {
-  formRole.value.id = props.roleId
+  formRole.id = props.roleId
   formLoading.value = true
   props.roleId === 0
     ? await requestMenus().finally(() => { formLoading.value = false })
@@ -98,15 +105,13 @@ const requestMenus = async () => {
 const requestRole = async () => {
   const { role, menus: menuData } = await getRole(props.roleId)
   menus.value = menuData
-  formRole.value = {
-    ...role,
-    checked_menus: role.rules.split(',').map(roleId => parseInt(roleId))
-  }
+  assignObjectValue(formRole, role)
+  formRole.checked_menus = role.rules.split(',').map(roleId => parseInt(roleId))
   await nextTick()
   selectCheckedMenus()
 }
 const selectCheckedMenus = () => {
-  for (const nodeId of formRole.value.checked_menus) {
+  for (const nodeId of formRole.checked_menus) {
     const node = treeRef.value?.getNode(nodeId)
     if (node && node.isLeaf) {
       treeRef.value?.setChecked(nodeId, true, false)
@@ -131,11 +136,11 @@ const onRoleFormClose = () => {
 }
 const treeRef = ref<ElTreeInstance>()
 const submitRoleForm = async () => {
-  formRole.value.checked_menus = [
+  formRole.checked_menus = [
     ...treeRef.value?.getHalfCheckedKeys() as number[],
     ...treeRef.value?.getCheckedKeys() as number[]
   ]
-  await createRole(formRole.value)
+  await createRole(formRole)
   ElMessage.success('操作成功')
   emit('success')
 }
