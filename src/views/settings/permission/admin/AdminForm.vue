@@ -96,7 +96,7 @@ import {
 } from 'vue'
 import DialogFormIndex from '@/components/dialog-form/DialogFormIndex.vue'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
-import { createAdmin, editAdmin, getRoles } from '@/api/admin'
+import { createAdmin, editAdmin, getRoleTypes } from '@/api/admin'
 
 const props = defineProps({
   admin: {
@@ -138,7 +138,7 @@ const roles = ref<IOption[]>()
 // todo 直接修改formAdmin的值，form来不及渲染，reset无效
 const onAdminFormOpen = async () => {
   formLoading.value = true
-  roles.value = await getRoles().finally(() => { formLoading.value = false })
+  roles.value = await getRoleTypes().finally(() => { formLoading.value = false })
   if (props.admin) {
     formAdmin.value = {
       id: props.admin.id,

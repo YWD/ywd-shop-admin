@@ -143,7 +143,7 @@ import AdminForm from '@/views/settings/permission/admin/AdminForm.vue'
 const queryForm = reactive({
   page: 1,
   limit: 10,
-  status: '' as (0 | 1 | ''),
+  status: undefined,
   name: '',
   roles: ''
 })

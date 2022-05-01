@@ -25,6 +25,7 @@
 </template>
 
 <script lang='ts' setup>
+/* eslint-disable import/first */
 import { PropType, ref } from 'vue'
 import { DialogInstance } from '@/types/element-plus'
 
