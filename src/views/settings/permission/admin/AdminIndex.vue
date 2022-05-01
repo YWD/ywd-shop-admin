@@ -9,6 +9,7 @@
       <el-form
         inline
         @submit.prevent="requestAdmins"
+        :disabled="adminsLoading"
       >
         <el-form-item label="状态">
           <el-select
@@ -47,12 +48,16 @@
     </el-card>
     <el-card>
       <template #header>
-        <el-button type="primary">
+        <el-button
+          type="primary"
+          @click="openAdminForm(null)"
+        >
           添加管理员
         </el-button>
       </template>
       <el-table
         :data="admins"
+        v-loading="adminsLoading"
       >
         <el-table-column
           prop="id"
@@ -73,39 +78,67 @@
         <el-table-column
           prop="status"
           label="状态"
-        />
+        >
+          <template #default="scope">
+            <el-switch
+              v-model="scope.row.status"
+              @change="requestChangeAdminStatus(scope.row)"
+              :loading="scope.row.statusLoading"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作"
         >
-          <template #default>
+          <template #default="scope">
             <el-button
               type="text"
+              size="small"
+              @click="openAdminForm(scope.row)"
             >
               编辑
             </el-button>
-            <el-button
-              type="text"
+            <el-popconfirm
+              title="确定删除管理员？"
+              @confirm="requestDeleteAdmin(scope.row.id)"
             >
-              删除
-            </el-button>
+              <template #reference>
+                <el-button
+                  type="text"
+                  size="small"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
       <pagination-index
         v-model:cur-page="queryForm.page"
         v-model:limit="queryForm.limit"
-        :total="adminCount"
+        :total="adminsCount"
         :query-method="requestAdmins"
+        :disabled="adminsLoading"
       />
     </el-card>
   </el-space>
+  <AdminForm
+    v-model="adminDialogVisible"
+    v-model:admin="curAdmin"
+    @success="requestAdmins"
+  />
 </template>
 
 <script lang='ts' setup>
-import { getAdmins } from '@/api/admin'
+import { changeAdminStatus, deleteAdmin, getAdmins } from '@/api/admin'
 import { onMounted, reactive, ref } from 'vue'
 import { Admin } from '@/api/types/admin'
 import PaginationIndex from '@/components/page/PaginationIndex.vue'
+import { ElMessage } from 'element-plus'
+import AdminForm from '@/views/settings/permission/admin/AdminForm.vue'
 
 const queryForm = reactive({
   page: 1,
@@ -115,12 +148,35 @@ const queryForm = reactive({
   roles: ''
 })
 const admins = ref<Admin[]>([])
-const adminCount = ref(0)
+const adminsCount = ref(0)
+const adminsLoading = ref(true)
+
 const requestAdmins = () => {
+  adminsLoading.value = true
   getAdmins(queryForm).then(rsp => {
     admins.value = rsp.list
-    adminCount.value = rsp.count
+    adminsCount.value = rsp.count
+    admins.value.forEach(item => {
+      item.statusLoading = false
+    })
+  }).finally(() => {
+    adminsLoading.value = false
   })
+}
+
+const requestDeleteAdmin = async (id: number) => {
+  await deleteAdmin(id)
+  ElMessage.success('删除成功')
+  requestAdmins()
+}
+
+const requestChangeAdminStatus = async (admin: Admin) => {
+  admin.statusLoading = true
+  await changeAdminStatus(admin)
+    .finally(() => {
+      admin.statusLoading = false
+    })
+  ElMessage.success('操作成功')
 }
 
 const changeStatus = () => {
@@ -132,6 +188,19 @@ const changeStatus = () => {
 onMounted(() => {
   requestAdmins()
 })
+
+const adminDialogVisible = ref(false)
+const curAdmin = ref<Admin>()
+const openAdminForm = (admin: Admin) => {
+  curAdmin.value = admin
+  adminDialogVisible.value = true
+}
+// getRoles().then(rsp => {
+//   console.log(rsp)
+// })
+// getAdmin().then(rsp => {
+//   console.log(rsp)
+// })
 </script>
 
 <style lang='scss' scoped>

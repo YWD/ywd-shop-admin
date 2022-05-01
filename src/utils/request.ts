@@ -72,7 +72,7 @@ export default {
     const rsp = await request.delete<AdminResponse>(url, config)
     return (rsp.data.data || rsp.data) as T
   },
-  put: async <T = any>(url: string, data: any, config?: AxiosRequestConfig) => {
+  put: async <T = any>(url: string, data?: any, config?: AxiosRequestConfig) => {
     const rsp = await request.put<AdminResponse>(url, data, config)
     return (rsp.data.data || rsp.data) as T
   }
