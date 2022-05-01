@@ -1,7 +1,5 @@
 <template>
-  <el-space
-    direction="vertical"
-  >
+  <PageContainer>
     <el-card>
       <template #header>
         数据筛选
@@ -128,7 +126,7 @@
         :disabled="rolesLoading"
       />
     </el-card>
-  </el-space>
+  </PageContainer>
   <RoleForm
     v-model="roleFormVisible"
     v-model:role-id="editRoleId"
@@ -140,7 +138,8 @@
 import { onMounted, reactive, ref } from 'vue'
 import { getRoles } from '@/api/role'
 import { Role } from '@/api/types/role'
-import PaginationIndex from '@/components/page/PaginationIndex.vue'
+import PageContainer from '@/components/page-container/PageContainer.vue'
+import PaginationIndex from '@/components/pagination/PaginationIndex.vue'
 import RoleForm from './RoleForm.vue'
 
 const queryForm = reactive({
@@ -181,19 +180,6 @@ onMounted(() => {
 </script>
 
 <style lang='scss' scoped>
- //todo
-.el-space {
-  width: 100%;
-}
-
-.el-pagination {
-  justify-content: end;
-  margin-top: 8px;
-}
-
-:deep(.el-space__item) {
-  width: 100%;
-}
 
 .text-nowrap {
   white-space: nowrap;

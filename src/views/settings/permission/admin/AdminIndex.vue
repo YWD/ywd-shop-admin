@@ -1,7 +1,5 @@
 <template>
-  <el-space
-    direction="vertical"
-  >
+  <PageContainer>
     <el-card>
       <template #header>
         数据筛选
@@ -124,7 +122,7 @@
         :disabled="adminsLoading"
       />
     </el-card>
-  </el-space>
+  </PageContainer>
   <AdminForm
     v-model="adminDialogVisible"
     v-model:admin="curAdmin"
@@ -136,7 +134,8 @@
 import { changeAdminStatus, deleteAdmin, getAdmins } from '@/api/admin'
 import { onMounted, reactive, ref } from 'vue'
 import { Admin } from '@/api/types/admin'
-import PaginationIndex from '@/components/page/PaginationIndex.vue'
+import PageContainer from '@/components/page-container/PageContainer.vue'
+import PaginationIndex from '@/components/pagination/PaginationIndex.vue'
 import { ElMessage } from 'element-plus'
 import AdminForm from '@/views/settings/permission/admin/AdminForm.vue'
 
@@ -204,16 +203,4 @@ const openAdminForm = (admin: Admin) => {
 </script>
 
 <style lang='scss' scoped>
-.el-space {
-  width: 100%;
-}
-
-.el-pagination {
-  justify-content: end;
-  margin-top: 8px;
-}
-
-:deep(.el-space__item) {
-  width: 100%;
-}
 </style>

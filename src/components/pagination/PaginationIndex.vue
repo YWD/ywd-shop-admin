@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Prop>(), {
   queryMethod: () => {}
 })
 
-// const emits = defineEmits(['update:cur-page', 'update:page-size'])
+// const emits = defineEmits(['update:cur-pagination', 'update:pagination-size'])
 interface Emit {
   (e: 'update:curPage', value: number): void
   (e: 'update:limit', value: number): void
@@ -54,5 +54,8 @@ const pageCurrentChange = (page: number) => {
 </script>
 
 <style lang='scss' scoped>
-
+.el-pagination {
+  justify-content: end;
+  margin-top: 8px;
+}
 </style>
