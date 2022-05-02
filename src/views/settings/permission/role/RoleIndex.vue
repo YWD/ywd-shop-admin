@@ -119,7 +119,7 @@
         </el-table-column>
       </el-table>
       <pagination-index
-        v-model:cur-page="queryForm.page"
+        v-model:page="queryForm.page"
         v-model:limit="queryForm.limit"
         :total="rolesCount"
         :query-method="requestRoles"
@@ -138,8 +138,8 @@
 import { onMounted, reactive, ref } from 'vue'
 import { getRoles } from '@/api/role'
 import { Role } from '@/api/types/role'
-import PageContainer from '@/components/page-container/PageContainer.vue'
-import PaginationIndex from '@/components/pagination/PaginationIndex.vue'
+import PageContainer from '@/components/page-container/AppPageContainer.vue'
+import PaginationIndex from '@/components/pagination/AppPagination.vue'
 import RoleForm from './RoleForm.vue'
 
 const queryForm = reactive({

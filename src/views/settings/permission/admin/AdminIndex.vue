@@ -115,7 +115,7 @@
         </el-table-column>
       </el-table>
       <pagination-index
-        v-model:cur-page="queryForm.page"
+        v-model:page="queryForm.page"
         v-model:limit="queryForm.limit"
         :total="adminsCount"
         :query-method="requestAdmins"
@@ -131,11 +131,11 @@
 </template>
 
 <script lang='ts' setup>
-import { changeAdminStatus, deleteAdmin, getAdmins } from '@/api/admin'
+import { editAdminStatus, deleteAdmin, getAdmins } from '@/api/admin'
 import { onMounted, reactive, ref } from 'vue'
 import { Admin } from '@/api/types/admin'
-import PageContainer from '@/components/page-container/PageContainer.vue'
-import PaginationIndex from '@/components/pagination/PaginationIndex.vue'
+import PageContainer from '@/components/page-container/AppPageContainer.vue'
+import PaginationIndex from '@/components/pagination/AppPagination.vue'
 import { ElMessage } from 'element-plus'
 import AdminForm from '@/views/settings/permission/admin/AdminForm.vue'
 
@@ -171,7 +171,7 @@ const requestDeleteAdmin = async (id: number) => {
 
 const requestChangeAdminStatus = async (admin: Admin) => {
   admin.statusLoading = true
-  await changeAdminStatus(admin)
+  await editAdminStatus(admin)
     .finally(() => {
       admin.statusLoading = false
     })

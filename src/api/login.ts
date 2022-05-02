@@ -3,10 +3,10 @@ import { LoginUser, LoginInfo, LoginResponse } from '@/api/types/login'
 import { AdminResponse } from '@/api/types/common'
 
 // 获取登录信息
-export const loginInfo = () => request.get<LoginInfo>('admin/login/info')
+export const getLoginInfo = () => request.get<LoginInfo>('admin/login/info')
 
 // 获取验证码
-export const captcha = () => request.get<Blob>('admin/captcha_pro', {
+export const getCaptcha = () => request.get<Blob>('admin/captcha_pro', {
   stamp: new Date().getTime()
 }, {
   responseType: 'blob'

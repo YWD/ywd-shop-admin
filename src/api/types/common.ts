@@ -3,3 +3,8 @@ export type AdminResponse<T = any> = {
   msg: string,
   data: T
 }
+
+export type PageData<T = any> = {
+  list: T[],
+  count: number
+}

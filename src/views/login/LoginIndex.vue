@@ -74,7 +74,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
-import { captcha, login } from '@/api/login'
+import { getCaptcha, login } from '@/api/login'
 import { useRouter } from 'vue-router'
 import useMainStore from '@/store/store_index'
 
@@ -120,7 +120,7 @@ const resetForm = () => {
   formRef.value?.resetFields()
 }
 const requestCaptcha = async () => {
-  const rsp = await captcha()
+  const rsp = await getCaptcha()
   captchaSrc.value = URL.createObjectURL(rsp)
 }
 

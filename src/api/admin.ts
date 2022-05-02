@@ -14,7 +14,7 @@ export const getAdmins = (query: any) => request.get<{
   list: Admin[]
 }>('admin/setting/admin', query)
 // 修改管理员状态
-export const changeAdminStatus = (admin: Admin) => request.put('admin/setting/set_status/' + admin.id + '/' + admin.status)
+export const editAdminStatus = (admin: Admin) => request.put('admin/setting/set_status/' + admin.id + '/' + admin.status)
 // 获取角色类型列表
 export const getRoleTypes = () => request.get('admin/setting/admin/create')
   .then(data => {

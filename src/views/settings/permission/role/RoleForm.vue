@@ -60,7 +60,7 @@
 
 <script lang='ts' setup>
 /* eslint-disable import/first */
-import DialogFormIndex from '@/components/dialog-form/DialogFormIndex.vue'
+import DialogFormIndex from '@/components/dialog-form/AppDialogForm.vue'
 import { nextTick, reactive, ref } from 'vue'
 import { createRole, getMenus, getRole } from '@/api/role'
 import { Menu } from '@/api/types/role'

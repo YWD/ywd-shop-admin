@@ -94,7 +94,7 @@ import {
   PropType,
   ref
 } from 'vue'
-import DialogFormIndex from '@/components/dialog-form/DialogFormIndex.vue'
+import DialogFormIndex from '@/components/dialog-form/AppDialogForm.vue'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
 import { createAdmin, editAdmin, getRoleTypes } from '@/api/admin'
 

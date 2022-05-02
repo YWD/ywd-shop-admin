@@ -3,7 +3,7 @@
     background
     layout="total,sizes,prev,pager,next,jumper"
     :page-size="props.limit"
-    :current-page="props.curPage"
+    :current-page="props.page"
     :total="props.total"
     :page-sizes="[10, 2, 3, 4]"
     @size-change="pageSizeChange"
@@ -23,13 +23,13 @@
 //   }
 // })
 interface Prop {
-  curPage: number,
+  page: number,
   limit: number,
   total: number,
   queryMethod: Function
 }
 const props = withDefaults(defineProps<Prop>(), {
-  curPage: 1,
+  page: 1,
   limit: 10,
   total: 0,
   queryMethod: () => {}
@@ -37,18 +37,18 @@ const props = withDefaults(defineProps<Prop>(), {
 
 // const emits = defineEmits(['update:cur-pagination', 'update:pagination-size'])
 interface Emit {
-  (e: 'update:curPage', value: number): void
+  (e: 'update:page', value: number): void
   (e: 'update:limit', value: number): void
 }
 const emit = defineEmits<Emit>()
 
 const pageSizeChange = (limit: number) => {
   emit('update:limit', limit)
-  emit('update:curPage', 1)
+  emit('update:page', 1)
   props.queryMethod()
 }
 const pageCurrentChange = (page: number) => {
-  emit('update:curPage', page)
+  emit('update:page', page)
   props.queryMethod()
 }
 </script>
