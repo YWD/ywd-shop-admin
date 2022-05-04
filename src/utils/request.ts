@@ -5,7 +5,7 @@ import useMainStore from '@/store/store_index'
 import router from '@/router/router-index'
 
 const request = axios.create({
-  // baseURL: import.meta.env.VITE_API_BASE_URL
+  baseURL: import.meta.env.VITE_API_BASE_URL
 })
 
 // Add a request interceptor
