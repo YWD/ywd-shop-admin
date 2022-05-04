@@ -11,13 +11,54 @@
       </template>
       <el-form
         label-width="100px"
+        :model="product"
       >
         <el-form-item
           label="商品名称"
+          prop="store_name"
+          required
         >
           <el-input
             v-model="product.store_name"
           />
+        </el-form-item>
+        <el-form-item
+          label="商品关键字"
+          prop="keyword"
+          required
+        >
+          <el-input
+            v-model="product.keyword"
+          />
+        </el-form-item>
+        <el-form-item
+          label="单位"
+          prop="unit_name"
+          required
+        >
+          <el-input
+            v-model="product.unit_name"
+          />
+        </el-form-item>
+        <el-form-item
+          label="商品封面图(最多1张)"
+          prop="unit_name"
+          required
+        >
+          xxx
+        </el-form-item>
+        <el-form-item
+          label="商品推荐图(最多1张)"
+          prop="unit_name"
+        >
+          xxx
+        </el-form-item>
+        <el-form-item
+          label="商品轮播图(最多10张)"
+          prop="unit_name"
+          required
+        >
+          xxx
         </el-form-item>
         <el-form-item
           label="商品规格"
@@ -143,9 +184,10 @@
         </el-form-item>
         <el-form-item>
           <el-button
-            @click="test"
+            @click="requestCreateProduct"
+            type="primary"
           >
-            测试
+            提交
           </el-button>
         </el-form-item>
       </el-form>
@@ -164,6 +206,8 @@ import { AttrRuleValue, AttrTableHeader, ProductAttr } from '@/api/types/product
 import AttrTable from './AttrTable.vue'
 import AttrTemplate from './AttrTemplate.vue'
 import AttrEdit from './AttrEdit.vue'
+import { createProduct } from '@/api/product'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const pageBack = () => {
@@ -171,8 +215,9 @@ const pageBack = () => {
 }
 
 const editorRef = ref<InstanceType<typeof AppEditor>>()
-const test = () => {
-  editorRef.value.valueHtml = '<p>点击设置内容</p>'
+const requestCreateProduct = async () => {
+  const rsp = await createProduct(product.value)
+  if (rsp.code === 200) ElMessage.success('成功')
 }
 
 const activities = ref([
@@ -197,16 +242,16 @@ const activities = ref([
 const product = ref({
   activity: computed(() => activities.value.map(item => item.name)),
   attrs: [] as ProductAttr[], // 商品规格
-  cate_id: [] as number[],
+  cate_id: [226],
   command_word: '',
   couponName: [],
   coupon_ids: [],
-  description: '',
+  description: '231',
   ficti: 0,
   give_integral: 0,
   header: [] as AttrTableHeader[],
   id: 0,
-  image: 'https://shop.fed.lagou.com/uploads/attach/2021/07/20210727/82b80d1996848be8294c6aaa609c4f0b.jpg',
+  image: 'https://shop.fed.lagounews.com/uploads/attach/2021/07/20210727/82b80d1996848be8294c6aaa609c4f0b.jpg',
   is_benefit: 0,
   is_best: 0,
   is_good: 0,
@@ -218,14 +263,13 @@ const product = ref({
   items: [] as AttrRuleValue[],
   keyword: '',
   label_id: [],
-  recommend_image: 'https://shop.fed.lagou.com/uploads/attach/2021/07/20210727/82b80d1996848be8294c6aaa609c4f0b.jpg',
+  recommend_image: 'https://shop.fed.lagounews.com/uploads/attach/2021/07/20210727/82b80d1996848be8294c6aaa609c4f0b.jpg',
   selectRule: '',
   slider_image: [
-    'https://shop.fed.lagou.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
-    'https://shop.fed.lagou.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
-    'https://shop.fed.lagou.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
-    'https://shop.fed.lagou.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
-    'https://shop.fed.lagou.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg'
+    'https://shop.fed.lagounews.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
+    'https://shop.fed.lagounews.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
+    'https://shop.fed.lagounews.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg',
+    'https://shop.fed.lagounews.com/uploads/attach/2021/07/20210719/512f2ee75f883f46e718bd9496edcc22.jpg'
   ],
   sort: 0,
   spec_type: 0 as 0 | 1, // 0 单规格、1 多规格
@@ -237,7 +281,7 @@ const product = ref({
 })
 
 const productAttrItem = {
-  pic: '',
+  pic: 'https://shop.fed.lagounews.com/uploads/attach/2022/04/20220430/2ae1e4641bd7551678234d2ba9731a49.jpg',
   vip_price: 0,
   price: 0,
   cost: 0,

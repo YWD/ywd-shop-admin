@@ -4,10 +4,10 @@ import {
   AttrTableHeader,
   Product, ProductAttr,
   ProductAttrTpl,
-  ProductCategory,
+  ProductCategory, ProductReply,
   ProductStockCategory
 } from '@/api/types/product'
-import { PageData } from '@/api/types/common'
+import { AdminResponse, PageData } from '@/api/types/common'
 
 // 获取商品分类
 export const getProductCategories = (type: string = '1') => request.get<ProductCategory[]>('admin/product/category/tree/' + type)
@@ -27,3 +27,13 @@ export const createProductAttrs =
         value: ProductAttr[]
       }
     }>(`admin/product/generate_attr/${id}/${type}`, data)
+export const createProduct = (product: any) => request.post<AdminResponse>('admin/product/product/' + product.id, product)
+
+// ------------------------------------------------------商品分类
+// 获取商品分类
+export const getProductCategories2 = (query: any) => request.get<PageData<ProductCategory>>('admin/product/category', query)
+
+// 获取商品规格
+export const getProductAttr = () => request.get<PageData<ProductAttrTpl>>('admin/product/product/rule')
+// 获取商品评论列表
+export const getProductReplies = () => request.get<PageData<ProductReply>>('admin/product/reply')

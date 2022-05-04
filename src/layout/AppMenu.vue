@@ -40,6 +40,9 @@
       <el-menu-item index="/product/list">
         <span>商品列表</span>
       </el-menu-item>
+      <el-menu-item index="/product/add">
+        <span>商品添加</span>
+      </el-menu-item>
       <el-menu-item index="/product/classify">
         <span>商品分类</span>
       </el-menu-item>

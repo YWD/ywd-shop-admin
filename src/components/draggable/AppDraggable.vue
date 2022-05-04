@@ -6,12 +6,16 @@
 
 <script lang='ts' setup>
 import Sortable from 'sortablejs'
-import { onMounted, ref } from 'vue'
+import { onMounted, PropType, ref } from 'vue'
 
 const props = defineProps({
   modelValue: {
     type: Array,
     required: true
+  },
+  options: {
+    type: Object as PropType<Sortable.Options>,
+    default: () => {}
   }
 })
 const emit = defineEmits(['update:modelValue'])
@@ -32,7 +36,8 @@ onMounted(() => {
         emit('update:modelValue', list)
         console.log(list)
       }
-    }
+    },
+    ...props.options
   })
 })
 </script>

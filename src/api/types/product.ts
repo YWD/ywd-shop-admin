@@ -5,6 +5,7 @@ export interface ProductCategory {
   sort: number
   pic: string
   is_show: number
+  show: boolean,
   add_time: string
   big_pic: string
   html: string
@@ -123,4 +124,30 @@ export type ProductAttr = Record<string, any> & {
   volume: number
   brokerage: number
   brokerage_two: number
+}
+
+export interface ProductReply {
+  id: number
+  uid: number
+  oid: number
+  unique: string
+  product_id: number
+  reply_type: string
+  product_score: number
+  service_score: number
+  comment: string
+  pics?: string[]
+  add_time: string
+  merchant_reply_content?: string
+  merchant_reply_time?: number
+  is_del: number
+  is_reply: number
+  nickname: string
+  avatar: string
+  store_name: string
+  image: string
+  account: string
+  time: string
+  create_time: string
+  score: number
 }

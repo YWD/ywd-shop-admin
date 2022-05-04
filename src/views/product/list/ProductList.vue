@@ -22,7 +22,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商品名称">
-          <el-input>
+          <el-input
+            v-model="queryForm.store_name"
+          >
             <template #append>
               <el-button :icon="Search" />
             </template>
@@ -56,10 +58,14 @@
           </el-icon>
           添加商品
         </el-button>
-        <el-button>
+        <el-button
+          v-if="queryForm.type === 2"
+        >
           批量上架
         </el-button>
-        <el-button>
+        <el-button
+          v-if="queryForm.type === 1"
+        >
           批量下架
         </el-button>
         <el-button
@@ -73,7 +79,47 @@
       </template>
       <el-table
         :data="products"
+        @sort-change="changeProductsSort"
+        @selection-change="selectProducts"
       >
+        <el-table-column type="expand">
+          <template #default="scope">
+            <el-form
+              inline
+              class="table-expand-form"
+            >
+              <el-form-item
+                label="商品分类"
+              >
+                {{ scope.row.cate_name }}
+              </el-form-item>
+              <el-form-item
+                label="市场价格"
+              >
+                {{ scope.row.ot_price }}
+              </el-form-item>
+              <el-form-item
+                label="成本价"
+              >
+                {{ scope.row.cost }}
+              </el-form-item>
+              <el-form-item
+                label="收藏数量"
+              >
+                {{ scope.row.collect }}
+              </el-form-item>
+              <el-form-item
+                label="虚拟销量"
+              >
+                {{ scope.row.ficti }}
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column
+          type="selection"
+          width="55"
+        />
         <el-table-column
           label="Id"
           prop="id"
@@ -100,6 +146,7 @@
         <el-table-column
           label="销量"
           prop="sales"
+          sortable
         />
         <el-table-column
           label="库存"
@@ -114,14 +161,23 @@
           prop="is_show"
         />
         <el-table-column label="操作">
-          <template #default="scope">
-            <el-button type="text">
-              编辑 {{ scope.row.id }}
+          <template #default>
+            <el-button
+              type="text"
+              size="small"
+            >
+              编辑
             </el-button>
-            <el-button type="text">
+            <el-button
+              type="text"
+              size="small"
+            >
               查看评论
             </el-button>
-            <el-button type="text">
+            <el-button
+              type="text"
+              size="small"
+            >
               恢复商品
             </el-button>
           </template>
@@ -141,16 +197,19 @@
 import { Document, Plus, Search } from '@element-plus/icons-vue'
 import PageContainer from '@/components/page-container/AppPageContainer.vue'
 import { getProductCategories, getProducts, getProductStockCategories } from '@/api/product'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { Product, ProductCategory, ProductStockCategory } from '@/api/types/product'
 import PaginationIndex from '@/components/pagination/AppPagination.vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 const queryForm = reactive({
   page: 1,
   limit: 10,
   cate_id: 0,
-  type: 1
+  store_name: '',
+  type: 1,
+  sales: 'normal' as 'normal' | 'asc' | 'desc'
 })
 
 onMounted(() => {
@@ -158,7 +217,6 @@ onMounted(() => {
   requestProductStockCategories()
   requestProducts()
 })
-getProducts().then(rsp => console.log(rsp))
 
 const products = ref<Product[]>()
 const productCount = ref(0)
@@ -180,11 +238,11 @@ const requestProductCategories = async () => {
 }
 
 const downloadProducts = async () => {
-  if (!products.value) return
+  if (!selectedProducts.value) return ElMessage.warning('请勾选商品')
   const { jsonToExcel } = await import('@/utils/export-to-excel')
 
   jsonToExcel({
-    data: products.value,
+    data: selectedProducts.value,
     fileName: '产品列表.xlsx',
     bookType: 'xlsx'
   })
@@ -194,8 +252,30 @@ const router = useRouter()
 const goProductAdd = () => {
   router.push('/product/add')
 }
+
+const changeProductsSort = ({ order }: { order: string }) => {
+  if (order === 'ascending') queryForm.sales = 'asc'
+  else queryForm.sales = 'desc'
+}
+watch(queryForm, () => {
+  requestProducts()
+}, {
+  deep: true
+})
+
+const selectedProducts = ref<Product[]>()
+const selectProducts = (value: any) => {
+  selectedProducts.value = value
+}
 </script>
 
 <style lang='scss' scoped>
-
+.table-expand-form {
+  width: 100%;
+  .el-form-item {
+    width: 50%;
+    margin-right: 0;
+    padding-left: 60px;
+  }
+}
 </style>
