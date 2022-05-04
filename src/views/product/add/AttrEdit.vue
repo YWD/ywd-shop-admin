@@ -187,7 +187,12 @@ const bindInputRef = async (el: HTMLInputElement) => {
 }
 
 const isAddAttr = ref(false)
-const attr = ref<AttrRuleValue>()
+const attr = ref<AttrRuleValue>({
+  value: '',
+  detail: [''],
+  inputVisible: false,
+  inputValue: ''
+})
 const showAddAttrForm = () => {
   attr.value = {
     value: '',

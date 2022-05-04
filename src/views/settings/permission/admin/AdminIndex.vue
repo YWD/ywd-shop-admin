@@ -48,7 +48,7 @@
       <template #header>
         <el-button
           type="primary"
-          @click="openAdminForm(null)"
+          @click="openAdminForm(undefined)"
         >
           添加管理员
         </el-button>
@@ -190,7 +190,7 @@ onMounted(() => {
 
 const adminDialogVisible = ref(false)
 const curAdmin = ref<Admin>()
-const openAdminForm = (admin: Admin) => {
+const openAdminForm = (admin: Admin | undefined) => {
   curAdmin.value = admin
   adminDialogVisible.value = true
 }

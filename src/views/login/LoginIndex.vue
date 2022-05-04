@@ -7,7 +7,7 @@
       @submit.prevent="requestLogin"
     >
       <img
-        src="src/assets/login-logo.png"
+        src="@/assets/login-logo.png"
         alt="登录logo"
         style="height: 80px"
       >
